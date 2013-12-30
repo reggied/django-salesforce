@@ -143,6 +143,9 @@ def prep_for_deserialize(model, record, using):
 			elif (x.__class__.__name__ == 'TimeField' and field_val is not None
 					and not DJANGO_14 and field_val.endswith('Z')):
 				fields[x.name] = field_val[:-1]  # Fix time e.g. "23:59:59.000Z"
+			elif (x.__class__.__name__ == 'DecimalField' and isinstance(field_val, float)):
+				# Decimal won't convert a float directly, we need to make it a string
+				fields[x.name] = decimal.Decimal(str(field_val))
 			else:
 				fields[x.name] = field_val
 	
