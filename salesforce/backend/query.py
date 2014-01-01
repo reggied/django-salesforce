@@ -415,13 +415,17 @@ class CursorWrapper(object):
 		"""
 		Fetch multiple results from a previously executed query.
 		"""
-		return list(islice(self.results, size))
+		results = self.results[:size]
+		self.results = self.results[size:]
+		return results
 
 	def fetchall(self):
 		"""
 		Fetch all results from a previously executed query.
 		"""
-		return list(self.results)
+		results = self.results
+		self.results = []
+		return results
 
 string_literal = quoted_string_literal
 def date_literal(d, c):
